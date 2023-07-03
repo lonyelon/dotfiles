@@ -1,0 +1,156 @@
+version: '3.3'
+
+networks:
+  nextcloud:
+  gitea:
+services:
+
+#                                                                      NEXTCLOUD
+################################################################################
+
+  nextcloud:
+    container_name: nextcloud
+    image: nextcloud:32
+    restart: no
+    volumes:
+      - /opt/apps/nextcloud:/var/www/html
+      - /opt/data:/var/www/html/data
+    environment:
+      - MYSQL_ROOT_PASSWORD=@nextcloud_mariadb_root_password@
+      - MYSQL_PASSWORD=@nextcloud_mariadb_password@
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+    ports:
+      - @privateVpnAddress@:8000:80
+      - @localAddress@:8000:80
+      #- @publicVpnAddress@:8000:80
+    networks:
+      - nextcloud
+  nextcloud-db:
+    container_name: nextcloud-db
+    image: mariadb:12
+    restart: no
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    volumes:
+      - /opt/apps/nextcloud-db:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=@nextcloud_mariadb_root_password@
+      - MYSQL_PASSWORD=@nextcloud_mariadb_password@
+      - MYSQL_DATABASE=nextcloud
+      - MYSQL_USER=nextcloud
+    networks:
+      - nextcloud
+  onlyoffice:
+    container_name: onlyoffice
+    image: onlyoffice/documentserver:latest
+    restart: unless-stopped
+    environment:
+      - JWT_ENABLED=true
+      - JWT_SECRET=secret
+      - USE_UNAUTHORIZED_STORAGE=true
+      - DISABLE_SSL=true
+    ports:
+      - @localAddress@:8080:80
+    networks:
+      - nextcloud
+
+#                                                                        TORRENT
+################################################################################
+
+  qbittorrent:
+    container_name: qbittorrent
+    image: linuxserver/qbittorrent:latest
+    restart: no
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+      - WEBUI_PORT=8001
+    volumes:
+      - /opt/apps/qbittorrent:/config
+      - /opt/data/sergio/files/torrent:/downloads
+    ports:
+      - @privateVpnAddress@:8001:8001
+
+#                                                                          GITEA
+################################################################################
+
+  forgejo:
+    container_name: forgejo
+    image: codeberg.org/forgejo/forgejo:12
+    restart: no
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+    volumes:
+      - /opt/apps/gitea:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+     - @privateVpnAddress@:8002:3000
+     - @privateVpnAddress@:8222:22
+    networks:
+      - gitea
+  forgejo-db:
+    container_name: gitea-db
+    image: mariadb:12
+    restart: no
+    environment:
+      - MYSQL_ROOT_PASSWORD=@forgejo_mariadb_root_password@
+      - MYSQL_DATABASE=gitea
+      - MYSQL_USER=gitea
+      - MYSQL_PASSWORD=@forgejo_mariadb_password@
+    volumes:
+      - /opt/apps/gitea-db:/var/lib/mysql
+    networks:
+      - gitea
+
+#                                                                      MINECRAFT
+################################################################################
+
+#  minecraft-guspos:
+#    image: itzg/minecraft-server
+#    environment:
+#      EULA: "true"
+#      VERSION: 1.19.2
+#    ports:
+#      - @privateVpnAddress@:25565:25565
+#      - @publicVpnAddress@:25565:25565
+#      - @localAddress@:25565:25565
+#    volumes:
+#      - /opt/apps/mc:/data
+#    stdin_open: true
+#    tty: true
+#    restart: no
+
+#                                                                           FAVA
+################################################################################
+
+  syncthing:
+    image: lscr.io/linuxserver/syncthing:latest
+    container_name: syncthing
+    hostname: syncthing
+    environment:
+      - PUID=0     # FIXME: This should not be owned or run by root.
+      - PGID=0     # FIXME: ^
+      - TZ=Etc/UTC
+    volumes:
+      - /opt/apps/syncthing:/config
+      - /opt/syncthing/sync:/sync
+    ports:
+      - @privateVpnAddress@:8384:8384
+      - 22000:22000/tcp
+      - 22000:22000/udp
+      - 21027:21027/udp
+    restart: unless-stopped
+  fava:
+    image: yegle/fava
+    container_name: fava
+    hostname: fava
+    environment:
+      - BEANCOUNT_FILE=/sync/cuentas.beancount
+    volumes:
+      - /opt/syncthing/sync:/sync
+    ports:
+      - @privateVpnAddress@:5000:5000/tcp
+    restart: unless-stopped

@@ -1,0 +1,222 @@
+#+title: Config
+#+STARTUP: show3levels
+
+This is my very cool Emacs config.
+
+* Config
+** Personal info
+
+#+BEGIN_SRC elisp
+(setq user-full-name "Sergio Miguéns Iglesias"
+      user-mail-address "yo@sergio.sh")
+#+END_SRC
+
+** Theme
+
+#+BEGIN_SRC elisp
+(setq doom-theme 'doom-gruvbox-light
+      display-line-numbers-type 'relative
+      fancy-splash-image "~/.local/share/emacs.png"
+      alpha-background 0.1
+      doom-font (font-spec :family "FiraCode Nerd Font" :size 13)
+      confirm-kill-emacs nil)
+#+END_SRC
+
+** Org
+
+#+BEGIN_SRC elisp
+(setq org-directory "~/sync/logseq/org/")
+#+END_SRC
+
+** Calendar
+*** Config calendar for Spain geek users
+
+#+BEGIN_SRC elisp
+(setq calendar-date-style 'iso
+      calendar-week-start-day 1)
+#+END_SRC
+
+*** Add a custom keybinding
+
+#+BEGIN_SRC elisp
+(map! :leader
+      :desc "Open calendar"
+      "o c" #'calendar)
+#+END_SRC
+
+*** Disable all holydays and add custom ones:
+
+#+BEGIN_SRC elisp
+(setq holiday-general-holidays nil
+      holiday-christian-holidays nil
+      holiday-hebrew-holidays nil
+      holiday-islamic-holidays nil
+      holiday-bahai-holidays nil
+      holiday-oriental-holidays nil)
+(setq holiday-local-holidays
+  '((holiday-fixed 1 1  "Año Nuevo")
+    (holiday-fixed 1 6  "Epifanía del Señor")
+    (holiday-easter-etc -3 "Jueves Santo")
+    (holiday-easter-etc -2 "Viernes Santo")
+    (holiday-fixed 5 1  "Fiesta del Trabajador")
+    (holiday-fixed 5 2  "Fiesta de la Comunidad de Madrid")
+    (holiday-fixed 5 15 "San Isidro Labrador")
+    (holiday-fixed 8 15 "Asunción de la Virgen")
+    (holiday-fixed 10 12 "Fiesta Nacional de España")
+    (holiday-fixed 11 1 "Todos los Santos")
+    (holiday-fixed 11 9 "Nuestra Señora de La Almudena")
+    (holiday-fixed 12 6 "Día de la Constitución Española")
+    (holiday-fixed 12 8 "Inmaculada Concepción")
+    (holiday-fixed 12 25 "Natividad del Señor")))
+#+END_SRC
+
+** Org-caldav
+
+#+BEGIN_SRC elisp
+(after! org-caldav
+        (setq org-caldav-url "http://192.168.1.200:8000/remote.php/dav/calendars/sergio"
+              org-caldav-calendar-id "personal"
+              org-caldav-inbox "/home/sergio/sync/logseq/org/dav-agenda.org"
+              org-caldav-files '("~/sync/logseq/org/agenda.org")
+              org-icalendar-timezone "Europe/Madrid"
+              org-icalendar-include-todo 'all
+              org-caldav-skip-conditions '(todostates ("PROJ"))))
+#+END_SRC
+
+** Mu4e
+*** Bookmarks
+
+#+BEGIN_SRC elisp
+(after! mu4e
+  (setq mu4e-bookmarks
+    '((:name "All archives"
+       :query "maildir:/lonyelon@gmail.com/Archive/ or maildir:/yo@sergio.sh/Archive/"
+       :key ?a)
+      (:name "Inbox"
+       :query "maildir:/lonyelon@gmail.com/Inbox/ or maildir:/yo@sergio.sh/Inbox/"
+       :key ?i))))
+#+END_SRC
+
+*** Archive mail
+
+#+BEGIN_SRC elisp
+(setq mu4e-refile-folder
+      (lambda (msg)
+        (cond
+         ((string-match-p "lonyelon@gmail.com" (mu4e-message-field msg :maildir)) "/lonyelon@gmail.com/[Gmail]/Todos")
+         ((string-match-p "yo@sergio.sh" (mu4e-message-field msg :maildir)) "/yo@sergio.sh/Archive")
+         (t "/archive"))))
+#+END_SRC
+
+*** Send mail
+
+#+BEGIN_SRC elisp
+(setq message-send-mail-function 'smtpmail-send-it)
+(setq smtpmail-smtp-server "mail.sergio.sh"
+      smtpmail-smtp-service 587
+      smtpmail-stream-type 'starttls)
+#+END_SRC
+
+** Zen mode
+
+#+BEGIN_SRC elisp
+(setq +zen-text-scale 0.5)
+(setq +zen-mixed-pitch-modes nil)
+#+END_SRC
+
+** Elfeed
+
+#+BEGIN_SRC elisp
+(map! :leader
+      :desc "Open elfeed"
+      "o n" #'elfeed)
+(after! elfeed
+  (setq elfeed-search-filter "@1-month-ago +unread -youtube")
+  (add-hook! 'elfeed-search-mode-hook #'elfeed-update))
+#+END_SRC
+
+*** Youtube
+**** Open YouTube on MPV
+
+#+BEGIN_SRC elisp
+(after! elfeed
+  (defun sergio/elfeed-open-entry ()
+    "Open elfeed entry: mpv for youtube, browser for everything else"
+    (interactive)
+    (let ((entry (elfeed-search-selected :single)))
+      (if (elfeed-tagged-p 'youtube entry)
+          (progn
+            (elfeed-untag entry 'unread)
+            (elfeed-search-update-entry entry)
+            (start-process "mpv" nil "mpv" (elfeed-entry-link entry)))
+        (elfeed-search-browse-url))))
+  (evil-define-key 'normal elfeed-search-mode-map
+    (kbd "g o") #'sergio/elfeed-open-entry))
+#+END_SRC
+
+**** YouTube feed keybinding
+
+#+BEGIN_SRC elisp
+(defun sergio/open-youtube-elfeed ()
+  (interactive)
+  (elfeed)
+  (elfeed-search-set-filter "+youtube"))
+(map! :leader
+      :desc "Open Youtube (elfeed)"
+      "o y" #'sergio/open-youtube-elfeed)
+#+END_SRC
+
+** TODO Dired
+
+#+BEGIN_SRC elisp
+(setq dired-omit-files "^\\..*")
+#+END_SRC
+
+** Company mode
+
+This is just so company help is only shown when presing =Ctrl+SPC= and not always. EMACS is single-threaded, can't wait for the lsp to process all my code.
+
+#+BEGIN_SRC elisp
+(after! company
+  (setq company-idle-delay nil))
+#+END_SRC
+
+* Custom functions
+** Logseq journaling
+
+That way I only use Logseq for reading notes, not for taking them : )
+
+#+BEGIN_SRC elisp
+(defun +sergio/logseq-journal ()
+  "Open a logseq daily journal file for today"
+  (interactive)
+  (let* ((date (format-time-string "%Y_%m_%d"))
+         (path  (expand-file-name (format "sync/logseq/journals/%s.md" date)
+                                  "~/")))
+    (find-file path)))
+(map! :leader
+      :desc "Open today's journal in Logseq"
+      "o l" #'+sergio/logseq-journal)
+#+END_SRC
+
+** Theme switching
+
+The idea is to call this from outside Emacs, when I switch between dark and light modes in my compositor.
+
+#+BEGIN_SRC elisp
+(defun +sergio/toggle-theme ()
+  "Toggle between dark and light themes"
+  (interactive)
+  (let ((current-theme (car custom-enabled-themes)))
+    (mapc #'disable-theme custom-enabled-themes)
+    (if (not (eq current-theme 'doom-1337))
+        (progn
+          (load-theme 'doom-1337 t)
+          (message "Switched to dark theme (doom-1337)"))
+      (progn
+        (load-theme 'doom-gruvbox-light t)
+        (message "Switched to light theme (doom-gruvbox-light)")))))
+(map! :leader
+      :desc "Switch between dark and light themes"
+      "t t" #'+sergio/toggle-theme)
+#+END_SRC

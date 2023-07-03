@@ -1,0 +1,13 @@
+#+title: My NixOS configs, in a flake
+
+This repo contains the flake used to build all my NixOS systems.
+
+I follow the [[https://github.com/mightyiam/dendritic][dendritic pattern]]!
+
+* Directories
+
+| Directory | What it is for                            |
+|-----------+-------------------------------------------|
+| =modules= | All nix modules, loaded by [[https://github.com/vic/import-tree][import-tree]].   |
+| =files=   | Random static files.                      |
+| =secrets= | [[https://github.com/ryantm/agenix][Agenix]] secrets.                           |
