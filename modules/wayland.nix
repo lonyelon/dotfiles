@@ -26,31 +26,20 @@
       programs.niri.enable = true;
 
       home-manager.users.sergio = let
-          wallpaperPkg = pkgs.stdenv.mkDerivation {
-            name = "wallpaper.png";
-            src = pkgs.fetchurl {
-              url = "https://upload.wikimedia.org/wikipedia/commons/e/ed/Semiradsky_Christ_Martha_Maria.jpg";
-              hash = "sha256-mY2U1jWAB/0//lzihjJPcmnidENeMziplWGwxrnMq7w=";
-            };
-            nativeBuildInputs = [
-              pkgs.imagemagick
-            ];
-            dontUnpack = true;
-            buildPhase = ''
-              magick "$src" \
+          wallpaperSource = pkgs.fetchurl {
+            url = "https://upload.wikimedia.org/wikipedia/commons/e/ed/Semiradsky_Christ_Martha_Maria.jpg";
+            sha256 = "sha256-mY2U1jWAB/0//lzihjJPcmnidENeMziplWGwxrnMq7w=";
+          };
+          wallpaper = pkgs.runCommand "process_cover" {
+              nativeBuildInputs = [ pkgs.imagemagick ];
+            } ''
+              magick "${wallpaperSource}" \
                 -resize 1200x720 \
                 \( +clone -background black -shadow 40x12+0+0 \) \
                 +swap -background "#fbf1c7" -layers merge \
                 -gravity center -extent 2560x1440 \
-                output.png
+                $out
             '';
-
-            installPhase = ''
-              mkdir -p $out
-              cp output.png $out/wallpaper.png
-            '';
-          };
-          wallpaper = "${wallpaperPkg}/wallpaper.png";
         in {
           home = {
             file = {
