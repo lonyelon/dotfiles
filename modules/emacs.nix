@@ -11,7 +11,16 @@
           mu.enable = true;
         }) config.lib.mail.accounts;
       home = {
-        file.".local/share/emacs.png".source = ../files/emacs.png;
+        file.".local/share/emacs.png".source = let
+            emacsCover = pkgs.fetchurl {
+              url = "https://upload.wikimedia.org/wikipedia/commons/4/49/%22The_School_of_Athens%22_by_Raffaello_Sanzio_da_Urbino.jpg";
+              sha256 = "sha256-o1GwucQp2D5x6ZLffTpDN3XDfhisRu9vZjUgsHWxfvQ=";
+            };
+          in pkgs.runCommand "process_cover" {
+                nativeBuildInputs = [ pkgs.imagemagick ];
+              } ''
+                magick ${emacsCover} -crop 435x550+1750+1250 -resize 290x366 $out
+              '';
         packages = with pkgs; [
           ispell
           jre_minimal # Required for ispell
