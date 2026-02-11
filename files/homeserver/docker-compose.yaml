@@ -57,20 +57,22 @@ services:
 #                                                                        TORRENT
 ################################################################################
 
-  qbittorrent:
-    container_name: qbittorrent
-    image: linuxserver/qbittorrent:latest
-    restart: no
+  transmission:
+    image: lscr.io/linuxserver/transmission:latest
+    container_name: transmission
     environment:
       - PUID=1000
       - PGID=1000
       - TZ=Europe/Madrid
-      - WEBUI_PORT=8001
+      - USER=sergio
+      - PASS=@transmission_password@
     volumes:
-      - /opt/apps/qbittorrent:/config
+      - /opt/apps/transmission:/config
       - /opt/data/sergio/files/torrent:/downloads
     ports:
-      - @privateVpnAddress@:8001:8001
+      - @localAddress@:8001:9091
+      - @privateVpnAddress@:8001:9091
+    restart: unless-stopped
 
 #                                                                          GITEA
 ################################################################################

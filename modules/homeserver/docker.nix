@@ -30,6 +30,7 @@
           replace_secret nextcloud_mariadb_root_password
           replace_secret forgejo_mariadb_password
           replace_secret forgejo_mariadb_root_password
+          replace_secret transmission_password
           replace_secret localAddress ${localAddress}
           replace_secret privateVpnAddress ${privateVpnAddress}
           replace_secret publicVpnAddress ${publicVpnAddress}
