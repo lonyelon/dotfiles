@@ -40,7 +40,13 @@
               monthly = 3;
               yearly = 1;
             };
-            readWritePaths = [ "/opt/data" "/opt/backup/borg" ];
+            readWritePaths = [
+              "/opt/data"
+              "/opt/backup/borg"
+            ];
+            patterns = [
+              "- /opt/data/sergio/files/torrent/**"
+            ];
             preHook = ''
               df -h | grep -q /opt/backup || exit 2
             '';

@@ -156,3 +156,20 @@ services:
     ports:
       - @privateVpnAddress@:5000:5000/tcp
     restart: unless-stopped
+
+#                                                                      STREAMING
+################################################################################
+
+  jellyfin:
+    image: lscr.io/linuxserver/jellyfin:latest
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Europe/Madrid
+    volumes:
+      - /opt/apps/jellyfin:/config
+      - /opt/data/sergio/files/torrent:/data/torrent
+    ports:
+      - 8096:8096
+      - 7359:7359
