@@ -5,12 +5,26 @@
         system = "aarch64-linux";
       };
       modules = [
-        self.nixosModules.pixel8a
+        self.nixOnDroidModules.pixel8a
       ];
     };
-    nixosModules.pixel8a = { ... }: {
+    nixOnDroidModules.pixel8a = { pkgs, ... }: {
       time.timeZone = "Europe/Madrid";
-      system.stateVersion = "25.11";
+      environment.packages = with pkgs; [
+        curl         # Web browsers.
+          wget       #  .
+        gcc          # Development.
+          cargo      #  .
+          git        #  .
+          gnumake    #  .
+          cmake      #  .
+          platformio #  .
+        jq           # Parsers.
+          yq         #  .
+        neovim       # Coolest text editor.
+          rsync      #  .
+      ];
+      system.stateVersion = "24.05";
     };
   };
 }
