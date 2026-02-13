@@ -22,7 +22,6 @@
     home-manager.users.sergio = {
       home = {
         packages = with pkgs; [
-          isync          # Mail utils.
           ffmpeg         # Image/video editors.
             imagemagick  #
           fastfetch      # Like neofetch but in C.
@@ -39,8 +38,7 @@
             freetype     #
           esptool        # Required for esp32 dev.
 
-          sxiv           # Image viewers.
-            feh          #
+          sxiv feh       # Image viewers.
           mpv vlc        # Image/video players
           cmus           # Music player.
           openscad       # CAD as code.
@@ -49,13 +47,11 @@
           logseq         # Note taking app.
           calibre        # Ebook manager.
           virt-manager   # VM manager.
-          sdrpp          # SDR tool.
           zotero         # Bibliography manager.
           orca-slicer    # 3D printer slicer.
           freecad        # CAD design tool.
           #kicad         # PCB design tool.
           krita          # Image editor.
-          pavucontrol    # Volume control
           dragon-drop    # Drag and drop from the console.
           #stellarium    # Real time planetarium.
           qbittorrent    # Torrent manager.

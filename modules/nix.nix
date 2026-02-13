@@ -8,6 +8,7 @@
           trusted-users = [ "root" ];
         };
       };
+      nixpkgs.config.allowUnfree = false;
     };
   };
 }

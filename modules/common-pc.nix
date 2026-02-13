@@ -20,34 +20,23 @@
       efi.canTouchEfiVariables = true;
     };
 
-    hardware = {
-      keyboard.qmk.enable = true;
-      rtl-sdr.enable = true;
-      hackrf.enable = true;
-    };
+    hardware.keyboard.qmk.enable = true;
 
     time.timeZone = "Europe/Madrid";
 
     networking.firewall.enable = false;
 
-    nixpkgs = {
-      hostPlatform = lib.mkDefault "x86_64-linux";
-      config.allowUnfree = false;
-    };
+    nixpkgs.hostPlatform = lib.mkDefault "x86_64-linux";
 
-    programs = {
-      zsh.enable = true;
-      dconf.enable = true;
-    };
+    programs.dconf.enable = true;
 
     fonts.packages = with pkgs; [
       noto-fonts
       noto-fonts-color-emoji
       liberation_ttf
       source-code-pro
+      texlivePackages.cm
     ];
-
-    security.rtkit.enable = true; # Required by Pipewire.
 
     environment.systemPackages = with pkgs; [
       btop         # Task manager.
@@ -68,18 +57,7 @@
       xorg.xbacklight
     ];
 
-    services = {
-      udisks2.enable = true;
-      pulseaudio.enable = false;
-      pipewire = {
-        enable = true;
-        alsa = {
-          enable = true;
-          support32Bit = true;
-        };
-        pulse.enable = true;
-      };
-    };
+    services.udisks2.enable = true;
 
     system.stateVersion = "23.05";
   };

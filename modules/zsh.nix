@@ -1,5 +1,6 @@
 { ... }: {
   flake.nixosModules.zsh = { config, ... }: {
+    programs.zsh.enable = true;
     home-manager.users.sergio.programs = {
       zsh = {
         enable = true;
