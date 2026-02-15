@@ -17,7 +17,7 @@
           nix-rebuild = "doas nixos-rebuild -I $HOME/proj/dotfiles/$(hostname)";
         };
         loginExtra = ''
-          [ -z $DISPLAY ] && [ "$(tty)" = '/dev/tty1' ] && Hyprland
+          [ -z $DISPLAY ] && [ "$(tty)" = '/dev/tty1' ] && start-hyprland
         '';
         initContent = ''
           autoload -Uz compinit vcs_info
