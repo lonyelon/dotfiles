@@ -196,7 +196,7 @@ That way I only use Logseq for reading notes, not for taking them : )
     (find-file path)))
 (map! :leader
       :desc "Open today's journal in Logseq"
-      "o l" #'+sergio/logseq-journal)
+      "o l" #'sergio/logseq-journal)
 #+END_SRC
 
 ** Theme switching
@@ -204,7 +204,7 @@ That way I only use Logseq for reading notes, not for taking them : )
 The idea is to call this from outside Emacs, when I switch between dark and light modes in my compositor.
 
 #+BEGIN_SRC elisp
-(defun +sergio/toggle-theme ()
+(defun sergio/toggle-theme ()
   "Toggle between dark and light themes"
   (interactive)
   (let ((current-theme (car custom-enabled-themes)))
@@ -218,5 +218,8 @@ The idea is to call this from outside Emacs, when I switch between dark and ligh
         (message "Switched to light theme (doom-gruvbox-light)")))))
 (map! :leader
       :desc "Switch between dark and light themes"
-      "t t" #'+sergio/toggle-theme)
+      "t t" #'sergio/toggle-theme)
 #+END_SRC
+
+#+RESULTS:
+: sergio/toggle-theme
