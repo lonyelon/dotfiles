@@ -52,6 +52,7 @@
           freecad        # CAD design tool.
           #kicad         # PCB design tool.
           krita          # Image editor.
+            inkscape     #
           dragon-drop    # Drag and drop from the console.
           #stellarium    # Real time planetarium.
           qbittorrent    # Torrent manager.
