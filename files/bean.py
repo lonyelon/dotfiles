@@ -118,9 +118,9 @@ def handle_balance(args):
         "BALANCES WHERE"
         "   account = 'Activos:Santander:Nomina'"
         "OR account = 'Activos:Santander:CuentaCompartida'"
-        "OR account ~ 'Activos:Emma'"
+        "OR account ~ 'Activos:Deudas:Emma'"
         "OR account = 'Pasivos:Santander:Credito'"
-        "OR account = 'Pasivos:Emma'"
+        "OR account = 'Pasivos:Deudas:Emma'"
     )
     run_and_print_query(args.file, query, tree=args.tree)
 
