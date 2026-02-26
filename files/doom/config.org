@@ -77,10 +77,18 @@ This is my very cool Emacs config.
         (setq org-caldav-url "http://192.168.1.200:8000/remote.php/dav/calendars/sergio"
               org-caldav-calendar-id "personal"
               org-caldav-inbox "/home/sergio/sync/logseq/org/dav-agenda.org"
-              org-caldav-files '("~/sync/logseq/org/agenda.org")
+              org-caldav-files '("~/sync/logseq/org/agenda.org"
+                                 "~/sync/logseq/org/todo.org")
               org-icalendar-timezone "Europe/Madrid"
               org-icalendar-include-todo 'all
-              org-caldav-skip-conditions '(todostates ("PROJ"))))
+              org-export-with-broken-links t
+              org-icalendar-use-scheduled '(todo-start event-if-todo event-if-not-todo)
+              org-icalendar-use-deadline  '(todo-due   event-if-todo event-if-not-todo)
+              org-caldav-todo-percent-states '((0   "TODO")
+                                               (0   "PROJ")
+                                               (10  "STRT")
+                                               (100 "NO")
+                                               (100 "DONE"))))
 #+END_SRC
 
 ** Mu4e
