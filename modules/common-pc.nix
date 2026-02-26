@@ -13,6 +13,7 @@
       self.nixosModules.sergio
       self.nixosModules.stevenblack-hosts
       self.nixosModules.wayland
+      self.nixosModules.waydroid
     ];
 
     boot.loader = {
