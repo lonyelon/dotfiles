@@ -45,16 +45,16 @@
           rssguard       # RSS feed reader.
           keepassxc      # Password manager.
           logseq         # Note taking app.
-          calibre        # Ebook manager.
+          #calibre        # Ebook manager.
           virt-manager   # VM manager.
           zotero         # Bibliography manager.
           orca-slicer    # 3D printer slicer.
           freecad        # CAD design tool.
-          #kicad         # PCB design tool.
+          kicad          # PCB design tool.
           krita          # Image editor.
             inkscape     #
           dragon-drop    # Drag and drop from the console.
-          #stellarium    # Real time planetarium.
+          stellarium     # Real time planetarium.
           qbittorrent    # Torrent manager.
           libreoffice    # Office tools.
           signal-desktop # Instant messaging app.
