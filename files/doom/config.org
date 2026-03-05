@@ -23,9 +23,55 @@ This is my very cool Emacs config.
 #+END_SRC
 
 ** Org
+*** Settings
 
 #+BEGIN_SRC elisp
 (setq org-directory "~/sync/logseq/org/")
+#+END_SRC
+
+*** Org-agenda
+
+I use the =org-agenda= to track events and TODOs, and Nextcloud to sync them to my phone.
+
+**** Settings
+
+Do not show scheduled tasks if the deadline is in the same day, and do not warn me for upcoming deadlines, I can already see them!
+
+#+BEGIN_SRC elisp
+(setq org-deadline-warning-days 0
+      org-agenda-skip-scheduled-if-deadline-is-shown t)
+#+END_SRC
+
+**** Keybindings
+
+I don't like having to press =SPC o a a a= to get to the agenda list since it is the only thing I use.
+
+#+BEGIN_SRC elisp
+(map! :leader
+      :desc "Org agenda"
+      "o a" #'org-agenda-list)
+#+END_SRC
+
+**** Org-caldav
+
+#+BEGIN_SRC elisp
+(after! org-caldav
+        (setq org-caldav-url "http://192.168.1.200:8000/remote.php/dav/calendars/sergio"
+              org-caldav-calendar-id "main"
+              org-caldav-inbox "/home/sergio/sync/logseq/org/dav-agenda.org"
+              org-caldav-files '("~/sync/logseq/org/agenda.org"
+                                 "~/sync/logseq/org/todo.org")
+              org-icalendar-timezone "Europe/Madrid"
+              org-icalendar-include-todo 'all
+              org-caldav-sync-todo t
+              org-export-with-broken-links t
+              org-icalendar-use-deadline '(event-if-not-todo todo-due)
+              org-icalendar-use-scheduled '(event-if-not-todo todo-start)
+              org-caldav-todo-percent-states '((0   "PROJ")
+                                               (0   "TODO")
+                                               (10  "STRT")
+                                               (100 "NO")
+                                               (100 "DONE"))))
 #+END_SRC
 
 ** Calendar
@@ -44,7 +90,7 @@ This is my very cool Emacs config.
       "o c" #'calendar)
 #+END_SRC
 
-*** Disable all holydays and add custom ones:
+*** Disable all holidays and add custom ones:
 
 #+BEGIN_SRC elisp
 (setq holiday-general-holidays nil
@@ -68,27 +114,6 @@ This is my very cool Emacs config.
     (holiday-fixed 12 6 "Día de la Constitución Española")
     (holiday-fixed 12 8 "Inmaculada Concepción")
     (holiday-fixed 12 25 "Natividad del Señor")))
-#+END_SRC
-
-** Org-caldav
-
-#+BEGIN_SRC elisp
-(after! org-caldav
-        (setq org-caldav-url "http://192.168.1.200:8000/remote.php/dav/calendars/sergio"
-              org-caldav-calendar-id "personal"
-              org-caldav-inbox "/home/sergio/sync/logseq/org/dav-agenda.org"
-              org-caldav-files '("~/sync/logseq/org/agenda.org"
-                                 "~/sync/logseq/org/todo.org")
-              org-icalendar-timezone "Europe/Madrid"
-              org-icalendar-include-todo 'all
-              org-export-with-broken-links t
-              org-icalendar-use-scheduled '(todo-start event-if-todo event-if-not-todo)
-              org-icalendar-use-deadline  '(todo-due   event-if-todo event-if-not-todo)
-              org-caldav-todo-percent-states '((0   "TODO")
-                                               (0   "PROJ")
-                                               (10  "STRT")
-                                               (100 "NO")
-                                               (100 "DONE"))))
 #+END_SRC
 
 ** Mu4e
