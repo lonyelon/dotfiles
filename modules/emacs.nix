@@ -29,6 +29,7 @@
           rust-analyzer # Required for (rust +lsp)
           clang-tools # Required for (cc +lsp)
           ty # Required for (python +lsp)
+          lean4
         ];
       };
       programs = {
