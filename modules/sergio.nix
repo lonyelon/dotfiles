@@ -83,7 +83,17 @@
           statusbar-fg = "rgb(0,0,0)";
           window-title-basename = true;
         };
-        mpv.enable = true;
+        mpv = {
+          enable = true;
+          config = {
+            hwdec = "nvdec";
+            gpu-api = "vulkan";
+            video-sync = "display-resample";
+            interpolation = true;
+            tscale = "oversample";
+            gpu-context = "waylandvk";
+          };
+        };
         borgmatic = {
           enable = true;
           backups.personal = {
