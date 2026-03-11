@@ -2,6 +2,7 @@
   flake.nixosModules.emacs = { config, lib, pkgs, ... }: {
     fonts.packages = with pkgs; [
       nerd-fonts.fira-code
+      inter
     ];
     home-manager.users.sergio = {
       imports = [
@@ -22,13 +23,7 @@
                 magick ${emacsCover} -crop 435x550+1750+1250 -resize 290x366 $out
               '';
         packages = with pkgs; [
-          ispell
-          jre_minimal # Required for ispell
           texlive.combined.scheme-full
-          fd
-          rust-analyzer # Required for (rust +lsp)
-          clang-tools # Required for (cc +lsp)
-          ty # Required for (python +lsp)
           lean4
         ];
       };
@@ -38,6 +33,17 @@
           enable = true;
           doomDir = ../files/doom;
           tangleArgs = "--all config.org";
+          extraBinPackages = with pkgs; [
+            ispell
+            jre_minimal # Required for ispell
+            rust-analyzer # Required for (rust +lsp)
+            clang-tools # Required for (cc +lsp)
+            ty # Required for (python +lsp)
+            git
+            ripgrep
+            fd
+            sqlite
+          ];
         };
       };
       services.emacs.enable = true;

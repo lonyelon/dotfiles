@@ -107,6 +107,38 @@ I don't like having to press =SPC o a a a= to get to the agenda list since it is
                                                (100 "DONE"))))
 #+END_SRC
 
+*** Org-roam
+
+Capture seconds too in the daily template, so that I get a new file per note I make (like in Logseq):
+
+#+BEGIN_SRC elisp
+(add-hook 'org-roam-buffer-postrender-functions
+  (lambda () (org--latex-preview-region (point-min) (point-max))))
+(after! org-roam
+  (setq org-roam-dailies-capture-templates
+    '(("d" "default" plain
+       "%?"
+       :target (file+head "%<%Y-%m-%d-%H-%M-%S>.org"
+                          "#+title: %<%Y-%m-%d %H:%M:%S>\n")))))
+#+END_SRC
+
+And preview all images and latex equations:
+
+#+BEGIN_SRC elisp
+(add-hook 'org-mode-hook
+  (lambda ()
+    (when (and buffer-file-name
+               (string-prefix-p (expand-file-name org-roam-directory)
+                                (expand-file-name buffer-file-name)))
+      (+zen/toggle 1)
+      (org-latex-preview '(16))
+      (org-display-inline-images t t))))
+
+(setq org-roam-mode-sections
+      '((org-roam-backlinks-section :unique t)
+        org-roam-reflinks-section))
+#+END_SRC
+
 ** Calendar
 *** Config calendar for Spain geek users
 
@@ -186,8 +218,10 @@ I don't like having to press =SPC o a a a= to get to the agenda list since it is
 ** Zen mode
 
 #+BEGIN_SRC elisp
-(setq +zen-text-scale 0.5)
-(setq +zen-mixed-pitch-modes nil)
+(add-hook 'writeroom-mode-hook
+  (lambda ()
+    (face-remap-add-relative 'default :family "Inter")))
+(setq +zen-text-scale 0.6)
 #+END_SRC
 
 ** Elfeed
