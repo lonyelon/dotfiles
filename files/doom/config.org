@@ -266,10 +266,12 @@ And preview all images and latex equations:
       "o y" #'sergio/open-youtube-elfeed)
 #+END_SRC
 
-** TODO Dired
+** Dired
 
 #+BEGIN_SRC elisp
 (setq dired-omit-files "^\\..*")
+(add-hook! dired-mode
+  (evil-local-set-key 'normal (kbd "h") #'dired-omit-mode))
 #+END_SRC
 
 ** Company mode
@@ -320,6 +322,3 @@ The idea is to call this from outside Emacs, when I switch between dark and ligh
       :desc "Switch between dark and light themes"
       "t t" #'sergio/toggle-theme)
 #+END_SRC
-
-#+RESULTS:
-: sergio/toggle-theme
