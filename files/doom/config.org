@@ -106,8 +106,7 @@ I don't like having to press =SPC o a a a= to get to the agenda list since it is
 #+END_SRC
 
 * Org-roam
-
-Capture seconds too in the daily template, so that I get a new file per note I make (like in Logseq):
+** Daily template
 
 #+BEGIN_SRC elisp
 (add-hook 'org-roam-buffer-postrender-functions
@@ -130,9 +129,7 @@ Capture seconds too in the daily template, so that I get a new file per note I m
 (advice-add 'org-display-inline-images :around #'my/org-display-inline-images-fix)
 #+END_SRC
 
-#+RESULTS:
-
-And preview all images and latex equations:
+** Preview images and latex equations
 
 #+BEGIN_SRC elisp
 (add-hook 'org-mode-hook
@@ -148,6 +145,92 @@ And preview all images and latex equations:
       '((org-roam-backlinks-section :unique t)
         org-roam-reflinks-section))
 #+END_SRC
+
+** Transitive backlinks
+
+Let's say node =A= references the =Topology= node, and =Topology= is a child of =Mathematics=:
+#+BEGIN_SRC
+:PROPERTIES:
+:ID: ...
+:PARENT: [[id:...][Mathematics]]
+:END:
+#+END_SRC
+
+I want =A= to appear in the backlink list of =Mathematics=, while not referencing it directly:
+
+#+begin_src elisp
+(defun sergio/get-child-nodes (root-node)
+  "Return all nodes whose PARENT is root-node."
+  (let* ((all-nodes (org-roam-db-query [:select [id properties] :from nodes]))
+         (matching (cl-remove-if-not
+                    (lambda (row)
+                      (let* ((props (cadr row))
+                             (parent (cdr (assoc "PARENT" props))))
+                        (and parent
+                             (string-match-p (org-roam-node-id root-node) parent))))
+                    all-nodes)))
+    (mapcar (lambda (row) (org-roam-node-create :id (car row))) matching)))
+
+
+(defun sergio/get-node-and-children (root-node)
+  "Return root-node and all nodes transitively linked via PARENT."
+  (let ((visited '())
+        (queue (list root-node)))
+    (while queue
+      (let ((current (pop queue)))
+        (unless (member (org-roam-node-id current) visited)
+          (push (org-roam-node-id current) visited)
+          (dolist (child (sergio/get-child-nodes current))
+            (push child queue)))))
+    (mapcar (lambda (id) (org-roam-node-create :id id)) visited)))
+
+
+(defun sergio/get-node-backlinks (target unique)
+  "Return backlinks for target node. If unique, return one per source."
+  (let ((sql (if unique
+                 [:select :distinct [source dest pos properties]
+                  :from links
+                  :where (= dest $s1)
+                  :and (= type "id")
+                  :group :by source
+                  :having (funcall min pos)]
+               [:select [source dest pos properties]
+                :from links
+                :where (= dest $s1)
+                :and (= type "id")])))
+    (org-roam-db-query sql (org-roam-node-id target))))
+
+
+(cl-defun sergio/get-node-and-children-backlinks (node &key unique)
+  "Return backlinks for the node and all it's descendants."
+  (let* ((all-targets (sergio/get-node-and-children node))
+         (all-backlinks (mapcan (lambda (target)
+                                  (sergio/get-node-backlinks target unique))
+                                all-targets))
+         (deduped (if unique
+                      (cl-remove-duplicates all-backlinks :key #'car :test #'string=)
+                    all-backlinks)))
+    (cl-loop for backlink in deduped
+             collect (pcase-let ((`(,source-id ,dest-id ,pos ,properties) backlink))
+                       (org-roam-populate
+                        (org-roam-backlink-create
+                         :source-node (org-roam-node-create :id source-id)
+                         :target-node (org-roam-node-create :id dest-id)
+                         :point pos
+                         :properties properties))))))
+
+
+(advice-add 'org-roam-backlinks-get :override
+            (lambda (node &rest args)
+              (apply #'sergio/get-node-and-children-backlinks node args)))
+#+end_src
+
+** TODO Fix image display in refs window
+** TODO Fix warnings
+
+#+BEGIN_QUOTE
+⛔ Warning (org-element): ‘org-element-at-point’ cannot be used in non-Org buffer #<buffer *org-roam*> (org-roam-mode)
+#+END_QUOTE
 
 * Calendar
 ** Config calendar for Spain geek users
