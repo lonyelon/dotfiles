@@ -1,17 +1,15 @@
-#+title: Config
 #+STARTUP: show3levels
 
-This is my very cool Emacs config.
+This is my very cool [[https://github.com/doomemacs/doomemacs][Doom Emacs]] config. Feel free to copy whatevery you need for yours : )
 
-* Config
-** Personal info
+* Personal info
 
 #+BEGIN_SRC elisp
 (setq user-full-name "Sergio Miguéns Iglesias"
       user-mail-address "yo@sergio.sh")
 #+END_SRC
 
-** Theme
+* Theme
 
 #+BEGIN_SRC elisp
 (setq doom-theme 'doom-gruvbox-light
@@ -22,18 +20,18 @@ This is my very cool Emacs config.
       confirm-kill-emacs nil)
 #+END_SRC
 
-** Org
-*** Settings
+* Org
+** Settings
 
 #+BEGIN_SRC elisp
 (setq org-directory "~/sync/logseq/org/")
 #+END_SRC
 
-*** Org-agenda
+** Org-agenda
 
 I use the =org-agenda= to track events and TODOs, and Nextcloud to sync them to my phone.
 
-**** Settings
+*** Settings
 
 Do not show scheduled tasks if the deadline is in the same day, and do not warn me for upcoming deadlines, I can already see them!
 
@@ -75,7 +73,7 @@ And make sure the agenda takes over the whole EMACS window.
       tab-bar-show nil)
 #+END_SRC
 
-**** Keybindings
+*** Keybindings
 
 I don't like having to press =SPC o a a a= to get to the agenda list since it is the only thing I use.
 
@@ -85,7 +83,7 @@ I don't like having to press =SPC o a a a= to get to the agenda list since it is
       "o a" #'org-agenda-list)
 #+END_SRC
 
-**** Org-caldav
+*** Org-caldav
 
 #+BEGIN_SRC elisp
 (after! org-caldav
@@ -107,7 +105,7 @@ I don't like having to press =SPC o a a a= to get to the agenda list since it is
                                                (100 "DONE"))))
 #+END_SRC
 
-*** Org-roam
+* Org-roam
 
 Capture seconds too in the daily template, so that I get a new file per note I make (like in Logseq):
 
@@ -120,7 +118,19 @@ Capture seconds too in the daily template, so that I get a new file per note I m
        "%?"
        :target (file+head "%<%Y-%m-%d-%H-%M-%S>.org"
                           "#+title: %<%Y-%m-%d %H:%M:%S>\n")))))
+
+
+(defun my/org-display-inline-images-fix (orig-fun &rest args)
+  (let ((default-directory
+          (if (bound-and-true-p org-roam-directory)
+              org-roam-directory
+            default-directory)))
+    (apply orig-fun args)))
+
+(advice-add 'org-display-inline-images :around #'my/org-display-inline-images-fix)
 #+END_SRC
+
+#+RESULTS:
 
 And preview all images and latex equations:
 
@@ -139,15 +149,15 @@ And preview all images and latex equations:
         org-roam-reflinks-section))
 #+END_SRC
 
-** Calendar
-*** Config calendar for Spain geek users
+* Calendar
+** Config calendar for Spain geek users
 
 #+BEGIN_SRC elisp
 (setq calendar-date-style 'iso
       calendar-week-start-day 1)
 #+END_SRC
 
-*** Add a custom keybinding
+** Add a custom keybinding
 
 #+BEGIN_SRC elisp
 (map! :leader
@@ -155,7 +165,7 @@ And preview all images and latex equations:
       "o c" #'calendar)
 #+END_SRC
 
-*** Disable all holidays and add custom ones:
+** Disable all holidays and add custom ones:
 
 #+BEGIN_SRC elisp
 (setq holiday-general-holidays nil
@@ -181,8 +191,8 @@ And preview all images and latex equations:
     (holiday-fixed 12 25 "Natividad del Señor")))
 #+END_SRC
 
-** Mu4e
-*** Bookmarks
+* Mu4e
+** Bookmarks
 
 #+BEGIN_SRC elisp
 (after! mu4e
@@ -195,7 +205,7 @@ And preview all images and latex equations:
        :key ?i))))
 #+END_SRC
 
-*** Archive mail
+** Archive mail
 
 #+BEGIN_SRC elisp
 (setq mu4e-refile-folder
@@ -206,7 +216,7 @@ And preview all images and latex equations:
          (t "/archive"))))
 #+END_SRC
 
-*** Send mail
+** Send mail
 
 #+BEGIN_SRC elisp
 (setq message-send-mail-function 'smtpmail-send-it)
@@ -215,7 +225,7 @@ And preview all images and latex equations:
       smtpmail-stream-type 'starttls)
 #+END_SRC
 
-** Zen mode
+* Zen mode
 
 #+BEGIN_SRC elisp
 (add-hook 'writeroom-mode-hook
@@ -224,7 +234,7 @@ And preview all images and latex equations:
 (setq +zen-text-scale 0.6)
 #+END_SRC
 
-** Elfeed
+* Elfeed
 
 #+BEGIN_SRC elisp
 (map! :leader
@@ -235,8 +245,8 @@ And preview all images and latex equations:
   (add-hook! 'elfeed-search-mode-hook #'elfeed-update))
 #+END_SRC
 
-*** Youtube
-**** Open YouTube on MPV
+** Youtube
+*** Open YouTube on MPV
 
 #+BEGIN_SRC elisp
 (after! elfeed
@@ -254,7 +264,7 @@ And preview all images and latex equations:
     (kbd "g o") #'sergio/elfeed-open-entry))
 #+END_SRC
 
-**** YouTube feed keybinding
+*** YouTube feed keybinding
 
 #+BEGIN_SRC elisp
 (defun sergio/open-youtube-elfeed ()
@@ -266,7 +276,7 @@ And preview all images and latex equations:
       "o y" #'sergio/open-youtube-elfeed)
 #+END_SRC
 
-** Dired
+* Dired
 
 #+BEGIN_SRC elisp
 (setq dired-omit-files "^\\..*")
@@ -274,7 +284,7 @@ And preview all images and latex equations:
   (evil-local-set-key 'normal (kbd "h") #'dired-omit-mode))
 #+END_SRC
 
-** Company mode
+* Company mode
 
 This is just so company help is only shown when presing =Ctrl+SPC= and not always. EMACS is single-threaded, can't wait for the lsp to process all my code.
 
