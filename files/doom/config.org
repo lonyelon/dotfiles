@@ -284,23 +284,6 @@ This is just so company help is only shown when presing =Ctrl+SPC= and not alway
 #+END_SRC
 
 * Custom functions
-** Logseq journaling
-
-That way I only use Logseq for reading notes, not for taking them : )
-
-#+BEGIN_SRC elisp
-(defun sergio/logseq-journal ()
-  "Open a logseq daily journal file for today"
-  (interactive)
-  (let* ((date (format-time-string "%Y_%m_%d"))
-         (path  (expand-file-name (format "sync/logseq/journals/%s.md" date)
-                                  "~/")))
-    (find-file path)))
-(map! :leader
-      :desc "Open today's journal in Logseq"
-      "o l" #'sergio/logseq-journal)
-#+END_SRC
-
 ** Theme switching
 
 The idea is to call this from outside Emacs, when I switch between dark and light modes in my compositor.
