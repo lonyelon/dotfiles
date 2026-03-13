@@ -22,9 +22,23 @@ This is my very cool [[https://github.com/doomemacs/doomemacs][Doom Emacs]] conf
 
 * Org
 ** Settings
+*** Org directory
 
 #+BEGIN_SRC elisp
 (setq org-directory "~/sync/logseq/org/")
+#+END_SRC
+
+*** Preview latex equations
+
+#+BEGIN_SRC elisp
+(add-hook 'org-mode-hook
+  (lambda ()
+    (when (and buffer-file-name
+               (string-prefix-p (expand-file-name org-roam-directory)
+                                (expand-file-name buffer-file-name)))
+      (+zen/toggle 1)
+      (org-latex-preview '(16))
+      (org-display-inline-images t t))))
 #+END_SRC
 
 ** Org-agenda
@@ -105,8 +119,10 @@ I don't like having to press =SPC o a a a= to get to the agenda list since it is
                                                (100 "DONE"))))
 #+END_SRC
 
-* Org-roam
-** Daily template
+** Org-roam
+*** Daily template
+
+I like it this way because it allows me to have one file per note, not per day.
 
 #+BEGIN_SRC elisp
 (add-hook 'org-roam-buffer-postrender-functions
@@ -117,36 +133,44 @@ I don't like having to press =SPC o a a a= to get to the agenda list since it is
        "%?"
        :target (file+head "%<%Y-%m-%d-%H-%M-%S>.org"
                           "#+title: %<%Y-%m-%d %H:%M:%S>\n")))))
-
-
-(defun my/org-display-inline-images-fix (orig-fun &rest args)
-  (let ((default-directory
-          (if (bound-and-true-p org-roam-directory)
-              org-roam-directory
-            default-directory)))
-    (apply orig-fun args)))
-
-(advice-add 'org-display-inline-images :around #'my/org-display-inline-images-fix)
 #+END_SRC
 
-** Preview images and latex equations
+*** Only show unique backlinks
 
 #+BEGIN_SRC elisp
-(add-hook 'org-mode-hook
-  (lambda ()
-    (when (and buffer-file-name
-               (string-prefix-p (expand-file-name org-roam-directory)
-                                (expand-file-name buffer-file-name)))
-      (+zen/toggle 1)
-      (org-latex-preview '(16))
-      (org-display-inline-images t t))))
-
 (setq org-roam-mode-sections
       '((org-roam-backlinks-section :unique t)
         org-roam-reflinks-section))
 #+END_SRC
 
-** Transitive backlinks
+*** Reference files by correct path
+
+File path referenced in org-roam are relative to ~default-directory~, the directory of the current buffer.
+That breaks image display in the backlinks buffer.
+This code solves it by checking if we are in a =org-roam= buffer and then changing the ~default-directory~ to ~org-roam-directory~.
+
+#+BEGIN_SRC elisp
+(defun sergio/fix-file-paths-in-roam (orig-fun &rest args)
+  (let ((default-directory
+          (if (bound-and-true-p org-roam-directory)
+              org-roam-directory
+            default-directory)))
+    (apply orig-fun args)))
+(advice-add 'org-display-inline-images :around #'sergio/fix-file-paths-in-roam)
+#+END_SRC
+
+*** Display images in backlinks buffer
+
+#+BEGIN_SRC elisp
+(defun sergio/display-images-in-backlinks-buffer ()
+  "Display inline images in the org-roam backlinks buffer."
+  (when-let ((buf (get-buffer org-roam-buffer)))
+    (with-current-buffer buf
+      (org-display-inline-images nil t (point-min) (point-max)))))
+(add-hook 'org-roam-buffer-postrender-functions #'sergio/display-images-in-backlinks-buffer)
+#+END_SRC
+
+*** Transitive backlinks
 
 Let's say node =A= references the =Topology= node, and =Topology= is a child of =Mathematics=:
 #+BEGIN_SRC
@@ -225,12 +249,17 @@ I want =A= to appear in the backlink list of =Mathematics=, while not referencin
               (apply #'sergio/get-node-and-children-backlinks node args)))
 #+end_src
 
-** TODO Fix image display in refs window
-** TODO Fix warnings
+*** Fix warnings
 
 #+BEGIN_QUOTE
 ⛔ Warning (org-element): ‘org-element-at-point’ cannot be used in non-Org buffer #<buffer *org-roam*> (org-roam-mode)
 #+END_QUOTE
+
+
+#+BEGIN_SRC elisp
+(after! org-roam
+  (add-to-list 'warning-suppress-types '(org-element)))
+#+END_SRC
 
 * Calendar
 ** Config calendar for Spain geek users
@@ -318,6 +347,7 @@ I want =A= to appear in the backlink list of =Mathematics=, while not referencin
 #+END_SRC
 
 * Elfeed
+** Settings
 
 #+BEGIN_SRC elisp
 (map! :leader
@@ -360,6 +390,7 @@ I want =A= to appear in the backlink list of =Mathematics=, while not referencin
 #+END_SRC
 
 * Dired
+** Show/hide hidden files
 
 #+BEGIN_SRC elisp
 (setq dired-omit-files "^\\..*")
@@ -368,6 +399,7 @@ I want =A= to appear in the backlink list of =Mathematics=, while not referencin
 #+END_SRC
 
 * Company mode
+** Show only when required
 
 This is just so company help is only shown when presing =Ctrl+SPC= and not always. EMACS is single-threaded, can't wait for the lsp to process all my code.
 
