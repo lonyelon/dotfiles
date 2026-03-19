@@ -143,6 +143,15 @@ I like it this way because it allows me to have one file per note, not per day.
         org-roam-reflinks-section))
 #+END_SRC
 
+*** Do not match cases in node search
+
+#+BEGIN_SRC elisp
+(defun sergio/org-roam-case-insensitive (orig-fn &rest args)
+  (let ((completion-ignore-case t))
+    (apply orig-fn args)))
+(advice-add 'org-roam-node-read :around #'sergio/org-roam-case-insensitive)
+#+END_SRC
+
 *** Reference files by correct path
 
 File path referenced in org-roam are relative to ~default-directory~, the directory of the current buffer.
