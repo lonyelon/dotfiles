@@ -6,8 +6,10 @@
       opengl = {
         enable = true;
         driSupport32Bit = true;
-        extraPackages = [
-          pkgs.nvidia-vaapi-driver
+        extraPackages = with pkgs; [
+          nvidia-vaapi-driver  # Hardware video decode via VA-API. Fixes OrcaSlicer.
+          libvdpau-va-gl       # Translates VDPAU → VA-API. Fixes OrcaSlicer.
+          egl-wayland
         ];
       };
       nvidia-container-toolkit.enable = true;
