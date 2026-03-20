@@ -48,7 +48,6 @@
           #calibre        # Ebook manager.
           virt-manager   # VM manager.
           zotero         # Bibliography manager.
-          orca-slicer    # 3D printer slicer.
           freecad        # CAD design tool.
           kicad          # PCB design tool.
           krita          # Image editor.
