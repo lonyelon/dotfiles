@@ -125,14 +125,13 @@ I don't like having to press =SPC o a a a= to get to the agenda list since it is
 I like it this way because it allows me to have one file per note, not per day.
 
 #+BEGIN_SRC elisp
-(add-hook 'org-roam-buffer-postrender-functions
-  (lambda () (org--latex-preview-region (point-min) (point-max))))
 (after! org-roam
   (setq org-roam-dailies-capture-templates
-    '(("d" "default" plain
+    `(("d" "default" plain
        "%?"
-       :target (file+head "%<%Y-%m-%d-%H-%M-%S>.org"
-                          "#+title: %<%Y-%m-%d %H:%M:%S>\n")))))
+       :target (file+head
+                ,(lambda () (format-time-string "%Y-%m-%d-%H-%M-%S.org"))
+                ,(lambda () (format-time-string "#+title: %Y-%m-%d %H:%M:%S\n")))))))
 #+END_SRC
 
 *** Only show unique backlinks
