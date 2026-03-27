@@ -41,6 +41,16 @@ This is my very cool [[https://github.com/doomemacs/doomemacs][Doom Emacs]] conf
       (org-display-inline-images t t))))
 #+END_SRC
 
+*** Show time in modeline
+
+I don't want to LISP for that long...
+
+#+BEGIN_SRC elisp
+(setq display-time-format "%H:%M %d-%m-%Y")
+(setq display-time-default-load-average nil)
+(display-time-mode 1)
+#+END_SRC
+
 ** Org-agenda
 
 I use the =org-agenda= to track events and TODOs, and Nextcloud to sync them to my phone.
