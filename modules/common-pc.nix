@@ -9,6 +9,7 @@
       self.nixosModules.email
       self.nixosModules.xorg
       self.nixosModules.ktl
+      self.nixosModules.plymouth
       self.nixosModules.rdiary
       self.nixosModules.sergio
       self.nixosModules.stevenblack-hosts

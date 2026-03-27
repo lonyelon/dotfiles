@@ -29,6 +29,10 @@
       url = "github:nix-community/autofirma-nix/75770f68709e764659712ff152193d7986db2530";
       #inputs.nixpkgs.follows = "nixpkgs-unstable";
     };
+    mac-style-plymouth-theme = {
+      url = "github:SergioRibera/s4rchiso-plymouth-theme";
+      inputs.nixpkgs.follows = "nixpkgs-unstable";
+    };
 
     agenix.url = "github:ryantm/agenix";
 
