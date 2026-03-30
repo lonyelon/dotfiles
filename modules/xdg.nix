@@ -5,6 +5,7 @@
       userDirs = {
         enable = true;
         createDirectories = true;
+        setSessionVariables = true;
         desktop = "${config.home-manager.users.sergio.home.homeDirectory}";
         documents = "${config.home-manager.users.sergio.home.homeDirectory}/doc";
         download = "${config.home-manager.users.sergio.home.homeDirectory}/dw";

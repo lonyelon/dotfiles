@@ -2,10 +2,9 @@
   flake.nixosModules.nvidia-gpu = { config, lib, pkgs, ... }: {
     services.xserver.videoDrivers = [ "nvidia" ];
     hardware = {
-      graphics.enable = true;
-      opengl = {
+      graphics = {
         enable = true;
-        driSupport32Bit = true;
+        enable32Bit = true;
         extraPackages = with pkgs; [
           nvidia-vaapi-driver  # Hardware video decode via VA-API. Fixes OrcaSlicer.
           libvdpau-va-gl       # Translates VDPAU → VA-API. Fixes OrcaSlicer.
