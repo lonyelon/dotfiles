@@ -120,7 +120,7 @@ def handle_balance(args):
         "OR account = 'Activos:Santander:CuentaCompartida'"
         "OR account ~ 'Activos:Deudas:Emma'"
         "OR account = 'Pasivos:Santander:Credito'"
-        "OR account = 'Pasivos:Deudas:Emma'"
+        "OR account = 'Pasivos:Emma'"
     )
     run_and_print_query(args.file, query, tree=args.tree)
 
