@@ -1,5 +1,5 @@
 { self, inputs, ... }: {
-  flake.nixosModules.rpi = {
+  flake.nixosModules.rpi = { pkgs, ... }: {
     services = {
       home-assistant = {
         enable = true;
@@ -13,6 +13,9 @@
             initial = false;
             icon = "mdi:car";
           };
+          homeassistant.allowlist_external_dirs = [
+            "/var/lib/hass/snapshots"
+          ];
         };
         extraComponents = [
           "esphome"
@@ -23,9 +26,9 @@
           "samsungtv"
           "ipp"
           "holiday"
-          "syncthing"
-          "speedtestdotnet"
           "minecraft_server"
+          "reolink"
+          "isal"
         ];
       };
       zwave-js = {

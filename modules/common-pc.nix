@@ -55,7 +55,7 @@
         rsync      #  .
       usbutils     # USB management tools.
         usb-modeswitch
-      xorg.xbacklight
+      xbacklight
     ];
 
     services.udisks2.enable = true;
