@@ -1,6 +1,6 @@
 {
   inputs = {
-    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable-small";
+    nixpkgs-unstable.url = "github:NixOS/nixpkgs/nixos-unstable";
     flake-parts.url = "github:hercules-ci/flake-parts";
     import-tree.url = "github:vic/import-tree";
     nix-doom-emacs-unstraightened = {
@@ -39,7 +39,7 @@
 
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-25.11";
     nixos-raspberrypi = {
-      url = "github:nvmd/nixos-raspberrypi/main";
+      url = "github:nvmd/nixos-raspberrypi/v1.20260223.0";
 
       # TODO: Pending merge when https://github.com/NixOS/nixpkgs/pull/398456
       #       gets into nixpkgs.
