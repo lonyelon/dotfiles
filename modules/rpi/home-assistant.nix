@@ -37,5 +37,23 @@
         secretsConfigFile = "/etc/zwave.json";
       };
     };
+    systemd = {
+      services.hass-snapshot-cleanup = {
+        description = "Delete Home Assistant snapshots older than 30 days";
+        script = "find /var/lib/hass/snapshots -maxdepth 1 -mtime +30 -delete";
+        serviceConfig = {
+          Type = "oneshot";
+          User = "root";
+        };
+      };
+      timers.hass-snapshot-cleanup = {
+        description = "Run hass-snapshot-cleanup every hour";
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          OnCalendar = "hourly";
+          Persistent = true;
+        };
+      };
+    };
   };
 }

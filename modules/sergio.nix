@@ -134,7 +134,7 @@
             "nixremberg" = {
               user = "root";
               port = 22;
-              hostname = "195.201.231.120";
+              hostname = "172.105.74.145";
             };
           };
         };

@@ -35,6 +35,10 @@
             publicKey = "ATD2Drcv6UTGHKYAmn469ncwXUHLTrxTN8Ak9utiSFA=";
             ip = "10.0.0.8";
           };
+          archremote = {
+            publicKey = "ahEm15zmaL6j99AIHjyb9e3gdV3JCcpX4JVswMKPeFk=";
+            ip = "10.0.0.9";
+          };
         };
       };
       public = {
@@ -119,6 +123,7 @@
           "wg-private.rpi.pre".file = ../secrets/wg-private.rpi.pre.age;
           "wg-private.nixtab.pre".file = ../secrets/wg-private.nixtab.pre.age;
           "wg-private.nixpad.pre".file = ../secrets/wg-private.nixpad.pre.age;
+          "wg-private.archremote.pre".file = ../secrets/wg-private.archremote.pre.age;
 
           "wg-public.pri".file = ../secrets/wg-public.pri.age;
           "wg-public.homeserver.pre".file = ../secrets/wg-public.homeserver.pre.age;

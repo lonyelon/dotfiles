@@ -1,10 +1,10 @@
 { self, inputs, lib, ... }: {
-  flake.nixosModules.nixremberg = { config, modulesPath, ... }: {
+  flake.nixosModules.linode = { config, modulesPath, ... }: {
     services = {
       grafana = {
         enable = true;
         settings.server = {
-          http_addr = "10.0.0.1"; # TODO Get this.
+          http_addr = "10.0.0.9"; # TODO Get this.
           http_port = 3000;
         };
       };
@@ -23,7 +23,8 @@
       };
     };
 
-
-    networking.firewall.allowedTCPPorts = [ 3000 ];
+    networking.firewall.allowedTCPPorts = [
+      3000
+    ];
   };
 }

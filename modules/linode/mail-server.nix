@@ -1,5 +1,8 @@
 { self, inputs, lib, ... }: {
-  flake.nixosModules.nixremberg = { config, modulesPath, ... }: {
+  flake.nixosModules.linode = { config, modulesPath, ... }: {
+    imports = [
+      inputs.simple-nixos-mailserver.nixosModule
+    ];
     age.secrets.email-server.file = ../../secrets/email-server.age;
     mailserver = {
       enable = true;
@@ -35,6 +38,7 @@
           specialUse = "Trash";
         };
       };
+      stateVersion = 3;
     };
   };
 }

@@ -4,13 +4,14 @@ let
   nixremberg = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIOj2PCyWB4oXQECqleBcenvMDW5yNY+4sM5ICocpHoIx";
   rpi = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAINEtGERmu1ZFMdbCie7e30lRolR2VgQ1mC2sd+gGPhoL";
   nixpad = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAII8MaNb7OPXFk2PL3m+34tqeq3pFcK1F5GQp2ZYBUvIQ";
+  archremote = "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGH2m2Hy0SYGTkpF7rj2kpGqzCD4ujKaVxnLhV5c6Pq/";
   #nixtab
   #pixel8a
 in
 {
   "email.age".publicKeys                     = [ icebear nixpad                ];
 
-  "email-server.age".publicKeys              = [ icebear            nixremberg ];
+  "email-server.age".publicKeys              = [ icebear            archremote ];
 
   "homeserver-docker.age".publicKeys         = [ icebear homeserver            ];
 
@@ -29,6 +30,8 @@ in
   "wg-private.nixtab.pri.age".publicKeys     = [ icebear                       ];
   "wg-private.nixpad.pre.age".publicKeys     = [ icebear nixpad     nixremberg ];
   "wg-private.nixpad.pri.age".publicKeys     = [ icebear nixpad                ];
+  "wg-private.archremote.pre.age".publicKeys = [ icebear archremote nixremberg ];
+  "wg-private.archremote.pri.age".publicKeys = [ icebear archremote            ];
 
   "wg-public.pri.age".publicKeys             = [ icebear            nixremberg ];
   "wg-public.homeserver.pre.age".publicKeys  = [ icebear            nixremberg ];

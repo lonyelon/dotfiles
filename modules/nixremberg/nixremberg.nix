@@ -2,7 +2,6 @@
   flake.nixosConfigurations.nixremberg = inputs.nixpkgs-stable.lib.nixosSystem {
     system = "x86_64-linux";
     modules = [
-      inputs.simple-nixos-mailserver.nixosModule
       self.nixosModules.vpn-server
       self.nixosModules.common-server
       self.nixosModules.nixremberg

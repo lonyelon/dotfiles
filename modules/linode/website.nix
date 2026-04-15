@@ -1,5 +1,5 @@
 { self, inputs, lib, ... }: {
-  flake.nixosModules.nixremberg = { config, modulesPath, ... }: {
+  flake.nixosModules.linode = { config, modulesPath, ... }: {
     services.nginx = {
       enable = true;
       user = "nginx";
