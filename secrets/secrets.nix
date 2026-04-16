@@ -15,6 +15,8 @@ in
 
   "homeserver-docker.age".publicKeys         = [ icebear homeserver            ];
 
+  "reolink.age".publicKeys                   = [ icebear rpi                   ];
+
   "wg-private.pri.age".publicKeys            = [ icebear            nixremberg ];
   "wg-private.icebear.pre.age".publicKeys    = [ icebear            nixremberg ];
   "wg-private.icebear.pri.age".publicKeys    = [ icebear                       ];

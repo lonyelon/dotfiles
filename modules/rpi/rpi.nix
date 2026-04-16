@@ -5,8 +5,9 @@
       inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.base
       inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.page-size-16k
       inputs.nixos-raspberrypi.nixosModules.raspberry-pi-5.bluetooth
-      self.nixosModules.common-server
       self.nixosModules.rpi
+      self.nixosModules.common-server
+      self.nixosModules.frigate
     ];
     specialArgs = inputs;
   };
