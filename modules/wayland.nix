@@ -4,8 +4,8 @@
       hyprlandMonitorList = lib.mkOption {
         type = lib.types.listOf lib.types.str;
       };
-      isLaptop = lib.mkEnableOption "Wether the machine is a laptop";
-      hasTouchScreen = lib.mkEnableOption "Wether the machine has touch screen";
+      isLaptop = lib.mkEnableOption "Whether the machine is a laptop";
+      hasTouchScreen = lib.mkEnableOption "Whether the machine has touch screen";
       reducePowerUsage = lib.mkEnableOption "Reduce power usage";
     };
 

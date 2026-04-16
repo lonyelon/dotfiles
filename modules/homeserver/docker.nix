@@ -2,8 +2,8 @@
   flake = {
     nixosModules.homeserver = { config, pkgs, lib, modulesPath, ... }: let
         localAddress = "192.168.1.200";
-        privateVpnAddress = builtins.elemAt config.networking.wg-quick.interfaces.wg-private.address 0;
-        publicVpnAddress = builtins.elemAt config.networking.wg-quick.interfaces.wg-public.address 0;
+        privateVpnAddress = builtins.elemAt config.networking.wg-quick.interfaces.${config.lib.vpn.private.name}.address 0;
+        publicVpnAddress = builtins.elemAt config.networking.wg-quick.interfaces.${config.lib.vpn.public.name}.address 0;
         dockerComposeFile = ../../files/homeserver/docker-compose.yaml;
         mountFile = pkgs.replaceVars ../../files/homeserver/mount.sh {
           dockerComposeFile = "/run/sergio/docker-compose.yaml";
