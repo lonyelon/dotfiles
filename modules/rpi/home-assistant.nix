@@ -19,6 +19,7 @@
         };
         extraComponents = [
           "esphome"
+          "mqtt"
           "met"
           "radio_browser"
           "zwave_js"
@@ -29,6 +30,22 @@
           "minecraft_server"
           "reolink"
           "isal"
+        ];
+        customComponents = [
+          pkgs.home-assistant-custom-components.frigate
+          (pkgs.buildHomeAssistantComponent rec {
+            owner = "greghesp";
+            domain = "bambu_lab";
+            version = "2.2.20";
+            src = pkgs.fetchFromGitHub {
+              owner = "greghesp";
+              repo = "ha-bambulab";
+              rev = "v${version}";
+              hash = "sha256-lKKfPWWcri2OUM9nkdY2iltvIaoFhnUP4HGBGDUnEww=";
+            };
+            dependencies = with pkgs.home-assistant.python.pkgs; [ beautifulsoup4 ];
+            doCheck = false;
+          })
         ];
       };
       zwave-js = {
