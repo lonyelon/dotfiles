@@ -3,7 +3,6 @@
     imports = [
       (modulesPath + "/installer/scan/not-detected.nix")
       self.nixosModules.autofirma
-      self.nixosModules.bean
       self.nixosModules.common
       self.nixosModules.emacs
       self.nixosModules.email

@@ -1,9 +1,5 @@
 { self, ... }: {
-  systems = [
-    "x86_64-linux"
-  ];
-  perSystem = { config, inputs', ... }: {
-    _module.args.pkgs = inputs'.nixpkgs-unstable.legacyPackages;
+  perSystem = { config, ... }: {
     packages.bean = config._module.args.pkgs.writers.writePython3Bin "bean" {
       libraries = with config._module.args.pkgs.python313Packages; [
         beanquery
@@ -11,7 +7,7 @@
       ];
     } ../files/bean.py;
   };
-  flake.nixosModules.bean = { pkgs, ... }: {
+  flake.nixosModules.sergio = { pkgs, ... }: {
     home-manager.users.sergio = {
       home.packages = [
         pkgs.beancount
