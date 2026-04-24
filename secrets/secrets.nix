@@ -12,6 +12,7 @@ in
   "email.age".publicKeys                     = [ icebear nixpad                ];
 
   "email-server.age".publicKeys              = [ icebear            archremote ];
+  "ntfy.age".publicKeys                      = [ icebear            archremote ];
 
   "homeserver-docker.age".publicKeys         = [ icebear homeserver            ];
 
