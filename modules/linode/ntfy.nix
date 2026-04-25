@@ -16,9 +16,9 @@
         description = "Check Xunta aerotermia grant availability";
         path = [ pkgs.curl ];
         script = ''
-          body=$(curl -s 'https://sede.xunta.gal/detalle-procedemento?codtram=VI406E&ano=2025')
+          body=$(curl -s 'https://sede.xunta.gal/detalle-procedemento?codtram=VI406E&ano=2026')
           if ! grep -q 'O recurso solicitado non foi atopado' <<<"$body"; then
-            curl -d '*Ayudas aerotermia* disponibles!' http://10.0.0.9:8001/alerts
+            curl -d 'Ayudas aerotermia 2026 disponibles!' http://10.0.0.9:8001/alerts
           fi
         '';
         serviceConfig = {
