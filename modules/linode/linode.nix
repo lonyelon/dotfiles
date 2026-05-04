@@ -1,5 +1,5 @@
 { self, inputs, lib, ... }: {
-  flake.nixosConfigurations.linode = inputs.nixpkgs-stable.lib.nixosSystem {
+  flake.nixosConfigurations.linode = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
     modules = [
       self.nixosModules.common-server

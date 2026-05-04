@@ -1,6 +1,6 @@
 { self, inputs, ... }: {
   flake = {
-    nixosConfigurations.nixpad = inputs.nixpkgs-unstable.lib.nixosSystem {
+    nixosConfigurations.nixpad = inputs.nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
         self.nixosModules.common-pc

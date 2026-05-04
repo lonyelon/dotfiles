@@ -1,5 +1,5 @@
 { self, inputs, lib, ... }: {
-  flake.nixosConfigurations.nixremberg = inputs.nixpkgs-stable.lib.nixosSystem {
+  flake.nixosConfigurations.nixremberg = inputs.nixpkgs.lib.nixosSystem {
     system = "x86_64-linux";
     modules = [
       self.nixosModules.vpn-server

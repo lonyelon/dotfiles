@@ -1,6 +1,6 @@
 { self, config, inputs, lib, pkgs, ... }: {
   flake = {
-    nixosConfigurations.homeserver = inputs.nixpkgs-stable.lib.nixosSystem {
+    nixosConfigurations.homeserver = inputs.nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
         self.nixosModules.common-server

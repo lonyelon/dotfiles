@@ -1,6 +1,6 @@
 { self, inputs, lib, pkgs, ... }: {
   flake = {
-    nixosConfigurations.icebear = inputs.nixpkgs-unstable.lib.nixosSystem {
+    nixosConfigurations.icebear = inputs.nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
         self.nixosModules.icebear

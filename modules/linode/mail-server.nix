@@ -8,7 +8,6 @@
       enable = true;
       fqdn = "mail.sergio.sh";
       domains = [ "sergio.sh" ];
-      certificateScheme = "acme";
       loginAccounts = let
           a = "y";
           b = "@se";
@@ -38,6 +37,7 @@
           specialUse = "Trash";
         };
       };
+      x509.useACMEHost = "mail.sergio.sh";
       stateVersion = 3;
     };
   };
