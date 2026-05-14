@@ -1,4 +1,4 @@
-{ self, ... }: {
+{ ... }: {
   flake.nixosModules.sergio = { pkgs, ... }: {
     home-manager.users.sergio.home.packages = with pkgs; [
       (pkgs.symlinkJoin {

@@ -20,6 +20,10 @@
           if ! grep -q 'O recurso solicitado non foi atopado' <<<"$body"; then
             curl -d 'Ayudas aerotermia 2026 disponibles!' http://10.0.0.9:8001/alerts
           fi
+          body=$(curl -s "https://www.xunta.gal/diario-oficial-galicia/mostrarContenido.do?ruta=/2026/$(date '+%Y%m%d')/Secciones1_gl.html&paginaCompleta=false&fecha=$(date '+%Y/%m/%d')&compMenu=10102")
+          if grep -q 'VI406E' <<<"$body"; then
+            curl -d 'Ayudas aerotermia 2026 aprobadas hoy!' http://10.0.0.9:8001/alerts
+          fi
         '';
         serviceConfig = {
           Type = "oneshot";
