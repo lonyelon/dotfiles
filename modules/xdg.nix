@@ -14,9 +14,9 @@
         publicShare = "${config.home-manager.users.sergio.home.homeDirectory}/doc/pub";
         templates = "${config.home-manager.users.sergio.home.homeDirectory}/doc/templates";
         videos = "${config.home-manager.users.sergio.home.homeDirectory}/doc/vid";
+        projects = "${config.home-manager.users.sergio.home.homeDirectory}/proj";
         extraConfig = {
-          PROJECTS_DIR = "${config.home-manager.users.sergio.home.homeDirectory}/proj";
-          VMS_DIR = "${config.home-manager.users.sergio.home.homeDirectory}/doc/vm";
+          VMS = "${config.home-manager.users.sergio.home.homeDirectory}/doc/vm";
         };
       };
       mimeApps = {
