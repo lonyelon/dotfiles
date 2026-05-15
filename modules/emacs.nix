@@ -34,8 +34,7 @@
           doomDir = ../files/doom;
           tangleArgs = "--all config.org";
           extraBinPackages = with pkgs; [
-            ispell
-            jre_minimal # Required for ispell
+            languagetool
             rust-analyzer # Required for (rust +lsp)
             clang-tools # Required for (cc +lsp)
             ty # Required for (python +lsp)
