@@ -364,6 +364,28 @@ I want =A= to appear in the backlink list of =Mathematics=, while not referencin
 (setq +zen-text-scale 0.6)
 #+END_SRC
 
+* Languagetool
+
+#+BEGIN_SRC elisp
+(setq langtool-default-language "en")
+(defun my/langtool-toggle-language ()
+  "Toggle LanguageTool between English and Spanish. Disable writegood-mode in Spanish (it's English-only)."
+  (interactive)
+  (if (string= langtool-default-language "en")
+      (progn
+        (setq langtool-default-language "es")
+        (when (bound-and-true-p writegood-mode)
+          (writegood-mode -1))
+        (message "LanguageTool: Spanish"))
+    (setq langtool-default-language "en")
+    (writegood-mode 1)
+    (message "LanguageTool: English")))
+(map! :leader
+      (:prefix ("l" . "languagetool")
+       :desc "LanguageTool check"     "l" #'langtool-check
+       :desc "Switch English/Spanish" "s" #'my/langtool-toggle-language))
+#+END_SRC
+
 * Elfeed
 ** Settings
 
