@@ -1,4 +1,8 @@
-#+title: My NixOS configs, in a flake
+#+title: Moved to Codeberg!!!!!
+
+This repo is no longer active, I have moved everything to [[https://codeberg.org/sergiosh/dotfiles][codeberg]].
+
+* My NixOS configs, in a flake
 
 This repo contains the flake used to build all my NixOS systems.
 
